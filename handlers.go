@@ -18,11 +18,6 @@ func rootHandler(rw http.ResponseWriter, request *http.Request) {
 	tmpl := template.Must(template.ParseFiles("assets/html/index.html"))
 	rw.WriteHeader(http.StatusOK)
 	artifactslist := getAllArtifacts(db)
-	/*
-		for l := range artifactslist {
-			log.Printf("\n Name: %v \n Description: %v \n BuildStatus: %v \n LastBuild: %v", artifactslist[l].Name, artifactslist[l].Description, artifactslist[l].LastBuildStatus, artifactslist[l].LastBuild)
-		}
-	*/
 	tmpl.Execute(rw, artifactslist)
 }
 
@@ -39,8 +34,6 @@ func updateArtifactHandler(rw http.ResponseWriter, request *http.Request) {
 
 	// Set build time as when it gets posted
 	now := time.Now()
-	log.Print("NOW: ")
-	log.Println(now)
 	t.LastBuild = now
 
 	// Get name to lower
