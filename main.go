@@ -15,7 +15,7 @@ type BuildArtifact struct {
 	BuildPromoted   bool
 	Description     string
 	LastBuildStatus string `validate:"nonzero"`
-	LastBuild       int64  `validate:"nonzero"`
+	LastBuild       time.Time
 }
 
 // ArtifactsList Used to contain a slice of build artifacts
@@ -35,14 +35,7 @@ func main() {
 	if err != nil {
 		fmt.Println("DB setup failed")
 	}
-	t := time.Now()
-
-	testartifact := BuildArtifact{Name: "Jim", LastBuildStatus: "Success", LastBuild: t.Unix()}
-	updateDBArtifact(db, testartifact)
-	testartifact = BuildArtifact{Name: "Turpin", LastBuildStatus: "Fail", LastBuild: t.Unix()}
-	updateDBArtifact(db, testartifact)
-	testartifact = BuildArtifact{Name: "Ayla", LastBuildStatus: "Uknown", LastBuild: t.Unix()}
-	updateDBArtifact(db, testartifact)
+	//t := time.Now()
 
 	fs := http.FileServer(http.Dir("assets/"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))

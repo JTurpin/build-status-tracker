@@ -9,7 +9,6 @@ RUN cd /src && go build -o status-tracker
 
 # Final container
 FROM alpine
-MAINTAINER <jim@jimturpin.com>
 
 COPY --from=build-env /src/status-tracker /
 EXPOSE 7080

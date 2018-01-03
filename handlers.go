@@ -2,9 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/boltdb/bolt"
@@ -25,19 +28,27 @@ func rootHandler(rw http.ResponseWriter, request *http.Request) {
 
 func updateArtifactHandler(rw http.ResponseWriter, request *http.Request) {
 	// Example Request:
-	// curl -vvv -X POST -d '{"Name":"autobot","Description":"","BuildVersion": "1","BuildPromoted": "true","LastBuildStatus":"Fail","LastBuild":"1514002902"}' http://localhost:7080/update
-	// LastBuild can be left blank and it will use current system time
-	// otherwise use epoch time in seconds
+	// curl -vvv -X POST -d '{"Name":"autobot","Description":"","BuildVersion": "1","LastBuildStatus":"Fail","LastBuild":"1514002902"}' http://localhost:7080/update
 	rw.WriteHeader(http.StatusCreated)
 	decoder := json.NewDecoder(request.Body)
 	var t BuildArtifact
-	if t.LastBuild == 0 {
-		now := time.Now()
-		t.LastBuild = now.Unix()
-	}
+	//now := time.Now()
+
 	err := decoder.Decode(&t)
+	fmt.Println(t.LastBuild)
+
+	// Set build time as when it gets posted
+	now := time.Now()
+	log.Print("NOW: ")
+	log.Println(now)
+	t.LastBuild = now
+
+	// Get name to lower
+	t.Name = strings.ToLower(t.Name)
+
 	if errs := validator.Validate(t); errs != nil {
 		// values not valid, deal with errors here
+		log.Println("There were errors in validating the request.")
 	} else {
 		updateDBArtifact(db, t)
 		if err != nil {
