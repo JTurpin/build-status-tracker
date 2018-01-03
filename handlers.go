@@ -27,10 +27,8 @@ func updateArtifactHandler(rw http.ResponseWriter, request *http.Request) {
 	rw.WriteHeader(http.StatusCreated)
 	decoder := json.NewDecoder(request.Body)
 	var t BuildArtifact
-	//now := time.Now()
 
 	err := decoder.Decode(&t)
-	fmt.Println(t.LastBuild)
 
 	// Set build time as when it gets posted
 	now := time.Now()
@@ -39,13 +37,24 @@ func updateArtifactHandler(rw http.ResponseWriter, request *http.Request) {
 	// Get name to lower
 	t.Name = strings.ToLower(t.Name)
 
+	tempBool, err := strconv.ParseBool(strconv.FormatBool(t.BuildPromoted))
+	if err == nil {
+		fmt.Printf("Type: %T \n", tempBool)
+		fmt.Println("Value:", tempBool)
+		t.BuildPromoted = tempBool
+	}
+
 	if errs := validator.Validate(t); errs != nil {
 		// values not valid, deal with errors here
-		log.Println("There were errors in validating the request.")
+		tmpl := template.Must(template.ParseFiles("assets/html/error_update.html"))
+		rw.WriteHeader(http.StatusBadRequest)
+		tmpl.Execute(rw, t)
+
+		//log.Println("There were errors in validating the request.")
 	} else {
 		updateDBArtifact(db, t)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 	}
 
@@ -53,7 +62,19 @@ func updateArtifactHandler(rw http.ResponseWriter, request *http.Request) {
 
 func deleteArtifactHandler(rw http.ResponseWriter, request *http.Request) {
 	rw.WriteHeader(http.StatusOK)
-	rw.Write([]byte("200 - Things seem to be running!\n"))
+	decoder := json.NewDecoder(request.Body)
+	var t BuildArtifact
+
+	err := decoder.Decode(&t)
+	if err != nil {
+		log.Println(err)
+	}
+
+	// Get name to lower
+	t.Name = strings.ToLower(t.Name)
+
+	deleteDBArtifact(db, t)
+	rw.Write([]byte("200 - Artifact deleted\n"))
 }
 
 func healthHandler(rw http.ResponseWriter, request *http.Request) {
@@ -62,7 +83,7 @@ func healthHandler(rw http.ResponseWriter, request *http.Request) {
 }
 
 func backupHandler(w http.ResponseWriter, req *http.Request) {
-	// This is invoked like this: curl http://localhost/backup > my.db
+	// This is invoked like this: curl http://localhost:7080/backup > my.db
 	err := db.View(func(tx *bolt.Tx) error {
 		w.Header().Set("Content-Type", "application/octet-stream")
 		w.Header().Set("Content-Disposition", `attachment; filename="my.db"`)
@@ -73,4 +94,11 @@ func backupHandler(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func helpHandler(w http.ResponseWriter, req *http.Request) {
+	tmpl := template.Must(template.ParseFiles("assets/html/help.html"))
+	w.WriteHeader(http.StatusOK)
+	var artifactslist BuildArtifact
+	tmpl.Execute(w, artifactslist)
 }

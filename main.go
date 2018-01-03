@@ -12,7 +12,7 @@ import (
 type BuildArtifact struct {
 	Name            string `validate:"nonzero"`
 	BuildVersion    string `validate:"nonzero"`
-	BuildPromoted   bool
+	BuildPromoted   bool   `json:"BuildPromoted"`
 	Description     string
 	LastBuildStatus string `validate:"nonzero"`
 	LastBuild       time.Time
@@ -45,6 +45,7 @@ func main() {
 	http.HandleFunc("/update", updateArtifactHandler)
 	http.HandleFunc("/delete", deleteArtifactHandler)
 	http.HandleFunc("/health", healthHandler)
+	http.HandleFunc("/help", helpHandler)
 	http.HandleFunc("/backup", backupHandler)
 
 	http.ListenAndServe(":7080", nil)

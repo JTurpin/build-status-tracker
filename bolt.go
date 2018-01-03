@@ -51,11 +51,12 @@ func updateDBArtifact(db *bolt.DB, buildArt BuildArtifact) error {
 
 func deleteDBArtifact(db *bolt.DB, buildArt BuildArtifact) {
 	err := db.Update(func(tx *bolt.Tx) error {
-		root := tx.Bucket([]byte("BuildArtifacts"))
-		err := root.Delete([]byte(buildArt.Name))
+		bucket := tx.Bucket([]byte("BuildArtifacts"))
+		err := bucket.Delete([]byte(buildArt.Name))
 		if err != nil {
 			return err
 		}
+		log.Println("Deleted Artifact: " + buildArt.Name)
 		return nil
 	})
 	if err != nil {

@@ -1,0 +1,123 @@
+<html>
+    <head>
+
+    </head>
+    <body style="background-color:#40485A;">
+        <div>
+            <font color="White">
+            <h1>HELP</h1>
+            <h3>Endpoints</h3>
+            <ul>
+                <li>
+                    <strong>"/"</strong>
+                    <ul>
+                        <li>
+                            <em>GET</em>
+                        </li>
+                        <li>Shows current status</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>"/update"</strong>
+                    <ul>
+                        <li>
+                            <em>POST</em>
+                        </li>
+                        <li>Fields
+                            <ul>
+                                <li>
+                                    <div>Name
+                                        <strong>*Required*</strong>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>BuildVersion
+                                        <strong>*Required*</strong>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>BuildPromoted bool</div>
+                                    <ul>
+                                        <li>format expected
+                                            <ul>
+                                                <li>true</li>
+                                                <li>false</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div>Description string</div>
+                                </li>
+                                <li>
+                                    <div>LastBuildStatus
+                                        <strong>*Required*</strong>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>CallbackURL string</div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Example:
+                            <ul>
+                                <li>curl -vvv -XPOST -H'Content-Type: application/json' -d '{"Name":"autobot","Description":"Its True","BuildVersion":"654","LastBuildStatus":"Fail","BuildPromoted":true,"CallbackURL":"http://google.com"}'
+                                    http://localhost:7080/update</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>"/delete"</strong>
+                    <ul>
+                        <li>
+                            <em>POST</em>
+                        </li>
+                        <li>Example:
+                            <ul>
+                                <li>curl -v -XPOST -H'Content-Type: application/json' -d '{"Name":"MattSucks","Description":"Its True","BuildVersion":"420","LastBuildStatus":"Fail","BuildPromoted":true,"CallbackURL":"http://google.com"}'
+                                    http://localhost:7080/delete</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>"/health"</strong>
+                    <ul>
+                        <li>
+                            <em>GET&nbsp;</em>
+                        </li>
+                        <li>Used for load balancer heal checks</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>"/help"</strong>
+                    <ul>
+                        <li>
+                            <em>GET</em>&nbsp;</li>
+                        <li>This documentation</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>"/backup"</strong>
+                    <ul>
+                        <li>
+                            <em>GET</em>
+                        </li>
+                        <li>Backup the boltdb</li>
+                        <li>Example
+                            <ul>
+                                <li>
+                                    <div>
+                                        <div>http://localhost:7080/backup &gt; my.db</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            </font>
+        </div>
+    </body>
+</html>
