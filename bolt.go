@@ -46,6 +46,7 @@ func updateDBArtifact(db *bolt.DB, buildArt BuildArtifact) error {
 		}
 		return b.Put([]byte(buildArt.Name), encoded)
 	})
+	log.Println("Updated Artifact: " + buildArt.Name)
 	return err
 }
 

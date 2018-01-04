@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -39,8 +38,6 @@ func updateArtifactHandler(rw http.ResponseWriter, request *http.Request) {
 
 	tempBool, err := strconv.ParseBool(strconv.FormatBool(t.BuildPromoted))
 	if err == nil {
-		fmt.Printf("Type: %T \n", tempBool)
-		fmt.Println("Value:", tempBool)
 		t.BuildPromoted = tempBool
 	}
 
@@ -94,6 +91,7 @@ func backupHandler(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+	log.Println("DB Backup completed by: " + req.RemoteAddr)
 }
 
 func helpHandler(w http.ResponseWriter, req *http.Request) {
