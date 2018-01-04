@@ -16,7 +16,7 @@
             <h1><font color="White">Latest Build Status</font></h1>
             <p>
             <!--Dynamic Stuff Here</h1> -->
-            <h3>
+          
             {{range .}} 
                 {{if eq .LastBuildStatus "Success"}}
                     <span class="label label-success" title="{{.Name}}" data-toggle="popover" data-html="true" data-content="Description: {{.Description}}<br>BuildVersion: {{.BuildVersion}}<br>BuildPromoted: {{.BuildPromoted}}<br>Last Build Date: {{.LastBuild}}<br>URL: <a href={{.CallbackURL}}>{{.CallbackURL}}</a>">{{.Name}}</span>
@@ -28,7 +28,7 @@
                     <span class="label label-default" title="{{.Name}}" data-toggle="popover" data-html="true" data-content="Description: {{.Description}}<br>BuildVersion: {{.BuildVersion}}<br>BuildPromoted: {{.BuildPromoted}}<br>Last Build Date: {{.LastBuild}}<br>URL: <a href={{.CallbackURL}}>{{.CallbackURL}}</a>">{{.Name}}</span>
                 {{end}}
             {{end}}
-            </h3>
+          
             </p>
 
 
