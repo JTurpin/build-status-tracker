@@ -15,4 +15,6 @@ COPY html/ /status-tracker/html
 COPY --from=build-env /src/status-tracker /status-tracker
 EXPOSE 7080
 
-CMD ["/status-tracker/./status-tracker"]
+WORKDIR /status-tracker
+
+CMD ["./status-tracker"]
