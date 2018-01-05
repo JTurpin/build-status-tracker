@@ -14,7 +14,7 @@ import (
 )
 
 func rootHandler(rw http.ResponseWriter, request *http.Request) {
-	tmpl := template.Must(template.ParseFiles("assets/html/index.html"))
+	tmpl := template.Must(template.ParseFiles("html/index.html"))
 	rw.WriteHeader(http.StatusOK)
 	artifactslist := getAllArtifacts(db)
 	tmpl.Execute(rw, artifactslist)
@@ -43,7 +43,7 @@ func updateArtifactHandler(rw http.ResponseWriter, request *http.Request) {
 
 	if errs := validator.Validate(t); errs != nil {
 		// values not valid, deal with errors here
-		tmpl := template.Must(template.ParseFiles("assets/html/error_update.html"))
+		tmpl := template.Must(template.ParseFiles("html/error_update.html"))
 		rw.WriteHeader(http.StatusBadRequest)
 		tmpl.Execute(rw, t)
 
@@ -95,7 +95,7 @@ func backupHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func helpHandler(w http.ResponseWriter, req *http.Request) {
-	tmpl := template.Must(template.ParseFiles("assets/html/help.html"))
+	tmpl := template.Must(template.ParseFiles("html/help.html"))
 	w.WriteHeader(http.StatusOK)
 	var artifactslist BuildArtifact
 	tmpl.Execute(w, artifactslist)

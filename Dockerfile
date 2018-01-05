@@ -1,6 +1,6 @@
 # build stage
 FROM golang:alpine AS build-env
-ADD . /src
+COPY . /src
 RUN  apk update && apk upgrade && \
      apk add --no-cache bash git openssh
 RUN go get github.com/boltdb/bolt 
@@ -10,7 +10,9 @@ RUN cd /src && go build -o status-tracker
 # Final container
 FROM alpine
 
-COPY --from=build-env /src/status-tracker /
+RUN mkdir /status-tracker
+COPY html/ /status-tracker/html
+COPY --from=build-env /src/status-tracker /status-tracker
 EXPOSE 7080
 
-CMD ["/status-tracker"]
+CMD ["/status-tracker/./status-tracker"]
